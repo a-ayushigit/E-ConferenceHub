@@ -12,11 +12,12 @@ const Sidebar = () => {
 
     const pathName = usePathname();//figure out which path we are coming from
   return (
-    <section className="sticky bg-dark-1 left-0 top-0 flex h-screen w-fit flex-col justify-between p-6  pt-28 text-white max-sm:hidden lg:w-[240px]">
+    <section className="sticky bg-dark-1 left-0 top-0 flex h-[100vh] w-fit flex-col justify-between p-6  pt-28 text-white max-sm:hidden lg:w-[240px]">
         {/* below 640px it will be hidden ? */}
      <div className="flex flex-1 flex-col gap-6">
      {sidebarLinks.map((link)=>{
-         const isActive = pathName === link.route || pathName.startsWith(link.route);
+         const isActive = (pathName === link.route )|| (pathName.startsWith(`${link.route}/`));
+        //  console.log(`${link.route}/`);
          return(
            <Link 
            href={link.route} 

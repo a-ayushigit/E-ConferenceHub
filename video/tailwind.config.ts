@@ -26,6 +26,22 @@ const config = {
         light:{
           1:'#f0d813',
         },
+        blue:{
+          1:'#0597ad',
+          2:'#083f75'
+        },
+        purple:{
+          1:'#6633de'
+        },
+        green:{
+          1:'#6cf59e'
+        },
+        pink:{
+          1:'#f587c5'
+        },
+        sky:{
+          1:'#a0e3fa'
+        },
         ftext:{
          1:'#f58a42',
         },
@@ -77,6 +93,9 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+      },
+      backgroundImage:{
+        hero:"url('/images/hero-background.png')",
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
