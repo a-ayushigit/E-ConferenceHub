@@ -22,6 +22,7 @@ const config = {
         dark:{
           2:'#a8a432',
           1:'#543f18',
+          3:"#f2b26d"
         },
         light:{
           1:'#f0d813',
