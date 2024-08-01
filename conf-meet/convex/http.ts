@@ -27,15 +27,15 @@ http.route({
       console.log("hello");
 
       switch (result.type) {
-        // case "user.created":
-        //   await ctx.runMutation(internal.users.createUser, {
-        //     tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.id}`,
-        //     name: `${result.data.first_name ?? ""} ${
-        //       result.data.last_name ?? ""
-        //     }`,
-        //     image: result.data.image_url,
-        //   });
-        //   break;
+        case "user.created":
+          await ctx.runMutation(internal.user.createUser, {
+            tokenIdentifier: `https://fresh-tiger-39.clerk.accounts.dev|${result.data.id}`,
+            name: `${result.data.first_name ?? ""} ${
+              result.data.last_name ?? ""
+            }`,
+           
+          });
+          break;
         // case "user.updated":
         //   await ctx.runMutation(internal.users.updateUser, {
         //     tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.id}`,
@@ -72,6 +72,10 @@ http.route({
           }
           else  new ConvexError("Conference not made yet ")
         
+          break;
+        case  "organizationInvitation.accepted":
+          console.log("Invitation accepted" , result.data);
+           
           break;
       }
 

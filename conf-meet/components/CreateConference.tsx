@@ -143,7 +143,17 @@ const CreateConference = () => {
         type="datetime-local"
         name="startDate"
         value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
+        onChange={(e) =>{
+          const newDate = Date.parse((e.target.value).toString()) ;
+          const curDate = new Date(Date.now());
+          const now = Date.parse(curDate.toString());
+          if (newDate < now){
+             return new Error("Invalid start Date: " + newDate)
+          }
+          setStartDate(e.target.value);
+
+
+        } }
         className="flex focus:border-none p-2"
       />
       <label className="font-bold">End Date</label>
@@ -151,7 +161,16 @@ const CreateConference = () => {
         type="datetime-local"
         name="endDate"
         value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
+        onChange={(e) =>{
+          const newDate = Date.parse((e.target.value).toString()) ;
+          const curDate = new Date(Date.now());
+          const start = Date.parse(startDate.toString());
+          const now = Date.parse(curDate.toString());
+          if ((newDate < now) || (newDate < start) ){
+             return new Error("Invalid end Date: " + newDate)
+          }
+          setEndDate(e.target.value);
+        } }
         className="flex focus:border-none p-2"
       />
       <h3 className="font-bold">Session Details</h3>
@@ -168,7 +187,16 @@ const CreateConference = () => {
         type="datetime-local"
         className="border-spacing-1 p-2 m-1 w-full"
         value={values.dateTime}
-        onChange={(e) => setValues({ ...values, dateTime: e.target.value })}
+        onChange={(e) => {
+          const sessionDate = Date.parse((e.target.value).toString());
+          const start = Date.parse(startDate.toString());
+          const end = Date.parse(endDate.toString());
+          if(sessionDate < start || sessionDate > end)
+            return new Error("Session date should be between start and end date");
+          
+          setValues({ ...values, dateTime: e.target.value });
+        }
+        }
       />
       <button type="button" onClick={addSession}>Add Session</button>
       {sessions.map((session, index) => (

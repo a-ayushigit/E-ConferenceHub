@@ -18,6 +18,7 @@ import type * as clerk from "../clerk.js";
 import type * as conference from "../conference.js";
 import type * as functions from "../functions.js";
 import type * as http from "../http.js";
+import type * as user from "../user.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   conference: typeof conference;
   functions: typeof functions;
   http: typeof http;
+  user: typeof user;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

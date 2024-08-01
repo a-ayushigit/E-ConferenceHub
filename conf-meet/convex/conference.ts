@@ -29,23 +29,29 @@ export const createConference = mutation({
          
     },
     handler:async(ctx,args) =>{
-        const confId = await ctx.db.insert("conference" , {
-              // unique id for each conference
-              
-              title:args.title,
-              subject:args.subject,
-              organizer:args.organizer,
-              startDate:args.startDate,
-              endDate:args.endDate,
-              sessions:args.sessions,
-              meetingLink:args.meetingLink
-
-    })
-        console.log("conference Id returned to frontend :",confId);
-        //conference Id returned to the frontend is the same as the one stored in the table 
-        return {
-            conferenceId: confId
+        try {
+            const confId = await ctx.db.insert("conference" , {
+                // unique id for each conference
+                
+                title:args.title,
+                subject:args.subject,
+                organizer:args.organizer,
+                startDate:args.startDate,
+                endDate:args.endDate,
+                sessions:args.sessions,
+                meetingLink:args.meetingLink
+  
+      })
+          console.log("conference Id returned to frontend :",confId);
+          //conference Id returned to the frontend is the same as the one stored in the table 
+          return {
+              conferenceId: confId
+          }
+            
+        } catch (error) {
+            console.log(error);
         }
+      
     }
 })
 
@@ -56,16 +62,48 @@ export const getConference = internalQuery({
     
     },
     handler:async(ctx,args)=>{
-        if(args.name){
-            const conference = await ctx.db.query("conference").withIndex("name", (q) =>
-                q.eq("title", args.name)).unique()
-            console.log("conference sent successfully")
-            return conference;
+        try {
+            if(args.name){
+                const conference = await ctx.db.query("conference").withIndex("name", (q) =>
+                    q.eq("title", args.name)).unique()
+                console.log("conference sent successfully")
+                return conference;
+            }
+            
+            else{
+                throw new Error("Provide name")
+            }
+            
+        } catch (error) {
+            console.log(error);
         }
         
-        else{
-            throw new Error("Provide name")
+    }
+})
+
+export const getConferenceForClient = query({
+    args:{
+        name:v.string()
+        
+    
+    },
+    handler:async(ctx,args)=>{
+        try {
+            if(args.name){
+                const conference = await ctx.db.query("conference").withIndex("name", (q) =>
+                    q.eq("title", args.name)).unique()
+                console.log("conference sent successfully")
+                return conference;
+            }
+            
+            else{
+                throw new Error("Provide name")
+            }
+            
+        } catch (error) {
+            console.log(error);
         }
+        
     }
 })
 
@@ -77,11 +115,16 @@ export const giveOrgIdtoConference = internalMutation({
     
     },
     handler:async(ctx,args)=>{
-        await ctx.db.patch(args.conferenceId, {
-            orgId: args.orgId
-        })
-        console.log("Organizer updated")
-        return 
+        try {
+            await ctx.db.patch(args.conferenceId, {
+                orgId: args.orgId
+            })
+            console.log("Organizer updated")
+            return  
+        } catch (error) {
+            console.log(error);
+        }
+       
     }
 })
 
@@ -106,6 +149,7 @@ export const getAllUpcomingConferences = mutation({
         const curDate = new Date(Date.now());
         const now = Date.parse(curDate.toString());
         const allConferences = await ctx.db.query("conference").collect();
+        console.log(allConferences);
         const upComingConf: Object[] = [];
         allConferences.map((conference)=>{
            
@@ -115,7 +159,7 @@ export const getAllUpcomingConferences = mutation({
             upComingConf.push(conference);
           }
         })
-        
+        console.log("upcomingConf ",upComingConf);
         return upComingConf;
     }
 })
@@ -151,3 +195,33 @@ export const getAllPreviousConferences = mutation({
 //     .filter(q => q.gte(new Date(q.field('startDate')).getTime(), curDate.getTime()))
 //     .collect();
 // });
+
+export const setAttendees = mutation({
+    args:{
+        tokenIdentifier : v.string(),
+        conferenceId : v.id("conference"),
+        name : v.string(),
+    },
+    handler:async(ctx,args)=>{
+        try{
+            const {conferenceId , tokenIdentifier} = args;
+            const conference = await ctx.db.get(conferenceId);
+            if(!conference){
+                throw new Error("Conference not found");
+            }
+            /***** Method to update the attendee List *****    ******/
+            const attendees = conference.attendees || [];
+            if(!attendees.includes({tokenIdentifier: tokenIdentifier, name:args.name})){
+                attendees.push({tokenIdentifier: tokenIdentifier , name:args.name});
+                await ctx.db.patch(conferenceId, { attendees });
+                console.log("Attendee added");
+                return conference;
+            }
+
+        }
+        catch(error){
+            console.log(error);
+        }
+
+    }
+})

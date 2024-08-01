@@ -12,6 +12,7 @@ const Page = () => {
   const [upComingConf, setUpComingConf] = useState<Object[]>([]);
   
  type Conference = {
+  _id:string,
   orgId: string,
   _creationTime: string,
   title:string,
@@ -22,7 +23,7 @@ const Page = () => {
   speakers:[string],
   organizer:string,//will be token identifier  
   attendees: [{
-      id:string,
+      tokenIdentifier:string,
       name:string
 
   }],

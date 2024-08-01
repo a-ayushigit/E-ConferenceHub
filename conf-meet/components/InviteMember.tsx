@@ -23,7 +23,7 @@ export const InviteMember = () => {
   const { isLoaded, organization, invitations } = useOrganization(OrgInvitationsParams)
   const [emailAddress, setEmailAddress] = useState("")
   const [disabled, setDisabled] = useState(false)
-  
+  //console.log(organization);
   if (!isLoaded || !organization) {
     return <>Loading</>
   }

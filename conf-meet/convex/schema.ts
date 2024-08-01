@@ -14,9 +14,8 @@ export default defineSchema({
         speakers:v.optional( v.array(v.string())),
         organizer:v.optional(v.string()),//will be token identifier  
         attendees: v.optional(v.array(v.object({
-            id:v.id("users"),
+            tokenIdentifier:v.string(),
             name:v.string()
-
         }))),
         meetingLink:v.optional(v.string()),
        
@@ -24,9 +23,9 @@ export default defineSchema({
     users: defineTable({
         name:v.string() , 
         tokenIdentifier:v.string(),
-        conferencesJoined:v.array(v.string()),
-        conferencesCreated:v.array(v.string()), 
-        role:v.string(),
+        conferencesJoined:v.optional(v.array(v.string())),
+        conferencesCreated:v.optional(v.array(v.string())), 
+        role:v.optional(v.string()),
    }).index("token" , ['tokenIdentifier']), 
     session: defineTable({
         title:v.string() , 
@@ -35,7 +34,7 @@ export default defineSchema({
         date:v.string(),
         time:v.string(),
         attendees: v.array(v.object({
-            id:v.id("users"),
+            tokenIdentifier:v.string(),
             name:v.string()
 
         }))
