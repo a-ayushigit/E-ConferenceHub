@@ -12,6 +12,8 @@ import { InviteMember } from './InviteMember';
 import InvitationList from './InvitationList';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { toast } from "sonner"
+import { useRouter } from 'next/navigation'
 
 type Conference = {
 
@@ -52,10 +54,22 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ conf }) => {
     const { organization } = useOrganization();
     const setAttendees = useMutation(api.conference.setAttendees);
     const ti = `https://fresh-tiger-39.clerk.accounts.dev|${user?.id}`;
-
+    const router = useRouter()
     const conference = useQuery(api.conference.getConferenceForClient, { name: conf.title });
     console.log(conference);
+    const setConferenceAttendee = async () => {
+        (user && conference) ? 
+        
+       setAttendees({ tokenIdentifier: ti, name: user?.fullName ? user.fullName : "user", conferenceId: conference?._id }).then(()=>{
+        toast.success("Attendee added successfully");
+        router.push(`/conference/${conference._id}`)
+       }) 
+            
+        
+        :
+        console.log("no user present!!!");
 
+    }
 
    
     return (
@@ -76,17 +90,16 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ conf }) => {
                             console.error('Failed to copy meeting link: ', error);
                         });
                 }}>Copy Meeting Link</button>
-                <button>Join Meeting</button>
+                <button onClick={()=>router.push(conf.meetingLink.toString())}>Join Meeting</button>
             </div>
 
             <p>Sessions: {conf.sessions.map((session, i) => (i + 1) + '. ' + session.description + ', ' + session.dateTime).join(', ')}</p>
 
             {/* Don't use includes as it compares the actual objects not the properties of the objects , use some instead  */}
-            <div className={`${(((user?.id) && (user?.id === conf.organizer)) || ((conf.attendees.some((attendee)=>attendee.tokenIdentifier === ti)))) ? "hidden" : "flex"}`}>
+            <div className={`${(((user?.id) && (user?.id === conf.organizer)) || (conf.attendees  && (conf.attendees.some((attendee)=>attendee.tokenIdentifier === ti)))) ? "hidden" : "flex"}`}>
                 <button className="bg-blue-400 text-blue-900"
                     onClick={() => {
-                        user && conference ? setAttendees({ tokenIdentifier: ti, name: user?.fullName ? user.fullName : "user", conferenceId: conference?._id }) :
-                            console.log("no user present!!!");
+                        setConferenceAttendee();
                     }}
                 >
 

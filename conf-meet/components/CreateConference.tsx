@@ -21,9 +21,11 @@ const CreateConference = () => {
   const { user } = useUser();
   const client = useStreamVideoClient();
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [description , setDescription] = useState("");
   const [meetingLink, setMeetingLink] = useState<string>("");
   const [values, setValues] = useState({ dateTime: '', description: '' });
   const [callDetails, setCallDetails] = useState<Call>();
+
   const router = useRouter();
   useEffect(() => {
     console.log("Sessions updated:", sessions);
@@ -103,6 +105,7 @@ const CreateConference = () => {
         endDate: endDate,
         meetingLink: meetLink,
         sessions: sessions,
+        description: description
       });
 
       setOrganizationName("");
@@ -173,6 +176,14 @@ const CreateConference = () => {
         } }
         className="flex focus:border-none p-2"
       />
+      <label>Description </label>
+      <input 
+      type="text"
+      name="description"
+      value={description}
+      placeholder="Give a Brief Description"
+      onChange={(e) => setDescription(e.target.value)}
+      className="flex focus:border-none p-2"/> 
       <h3 className="font-bold">Session Details</h3>
       <label>Name of session</label>
       <input

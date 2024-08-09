@@ -25,7 +25,8 @@ export const createConference = mutation({
          startDate:v.string(),
          endDate:v.string(),
          meetingLink:v.string(),
-         sessions:v.optional(v.array(v.object({ description:v.string() , dateTime:v.string() })))
+         sessions:v.optional(v.array(v.object({ description:v.string() , dateTime:v.string() }))),
+         description:v.string(),
          
     },
     handler:async(ctx,args) =>{
@@ -39,7 +40,8 @@ export const createConference = mutation({
                 startDate:args.startDate,
                 endDate:args.endDate,
                 sessions:args.sessions,
-                meetingLink:args.meetingLink
+                meetingLink:args.meetingLink,
+                description:args.description
   
       })
           console.log("conference Id returned to frontend :",confId);
@@ -105,6 +107,13 @@ export const getConferenceForClient = query({
         }
         
     }
+})
+
+export const getConferenceDetails = query({
+    args: { id: v.string() },
+    handler: async (ctx, args) => {
+      return await ctx.db.query("conference").filter((q)=> q.eq(q.field("_id"), args.id)).collect();
+    },
 })
 
 export const giveOrgIdtoConference = internalMutation({
@@ -211,11 +220,14 @@ export const setAttendees = mutation({
             }
             /***** Method to update the attendee List *****    ******/
             const attendees = conference.attendees || [];
-            if(!attendees.includes({tokenIdentifier: tokenIdentifier, name:args.name})){
+            if(!attendees.some((attendee) => attendee.tokenIdentifier === tokenIdentifier && attendee.name === args.name)){
                 attendees.push({tokenIdentifier: tokenIdentifier , name:args.name});
                 await ctx.db.patch(conferenceId, { attendees });
                 console.log("Attendee added");
                 return conference;
+            }
+            else{
+                throw new Error ("Attendee already added ");
             }
 
         }

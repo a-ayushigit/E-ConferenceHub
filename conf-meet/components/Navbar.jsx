@@ -29,8 +29,8 @@ const Navbar = () => {
       </div>
       <div className="flex flex-row gap-3 p-2">
       <SignedIn>
-          <UserButton className="flex " />
-          <SignOutButton className="flex self-center" >Log Out</SignOutButton>
+          <UserButton  />
+          <SignOutButton  >Log Out</SignOutButton>
       </SignedIn>    
       </div>
     </div>

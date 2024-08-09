@@ -18,13 +18,17 @@ export default defineSchema({
             name:v.string()
         }))),
         meetingLink:v.optional(v.string()),
+        description:v.optional(v.string()),
        
     }).index("name" , ['title']), 
     users: defineTable({
         name:v.string() , 
         tokenIdentifier:v.string(),
-        conferencesJoined:v.optional(v.array(v.string())),
-        conferencesCreated:v.optional(v.array(v.string())), 
+        conferencesCreated:v.optional(v.array(v.string())),
+        conferencesJoined:v.optional(v.array(v.object({
+            confId:v.string(),
+            role:v.string()
+        }))), 
         role:v.optional(v.string()),
    }).index("token" , ['tokenIdentifier']), 
     session: defineTable({
@@ -37,6 +41,7 @@ export default defineSchema({
             tokenIdentifier:v.string(),
             name:v.string()
 
-        }))
+        })),
+
     })
 })
