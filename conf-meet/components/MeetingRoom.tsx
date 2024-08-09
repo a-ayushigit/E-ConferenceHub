@@ -45,19 +45,7 @@ const MeetingRoom = () => {
     const isPersonalRoom = !!searchParams.get('personal');
 
 
-    // const CallLayout = () => {
-    //     switch (layout) {
-    //         case 'grid':
-    //             return <PaginatedGridLayout />
-    //         case 'speaker-right':
-    //             return <SpeakerLayout participantsBarPosition="left" />
-    //         case 'speaker-left':
-    //             return <SpeakerLayout participantsBarPosition="right" />
-    //         default:
-    //             break;
-
-    //     }
-    // }
+    
     return (
         <section className="h-screen relative w-full overflow-hidden pt-4 text-white ">
             <div className="relative flex size-full  items-center justify-center">
