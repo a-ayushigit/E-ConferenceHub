@@ -5,6 +5,7 @@ import { ConvexClientProvider } from "@/providers/convex-client-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar.jsx";
 import { Toaster } from "@/components/ui/sonner"
+import '@stream-io/video-react-sdk/dist/css/styles.css';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
