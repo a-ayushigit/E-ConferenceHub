@@ -1,4 +1,6 @@
 import {nextui} from '@nextui-org/theme';
+import { animate } from 'framer-motion/dom';
+
 // import { animate } from 'framer-motion';
 import type { Config } from "tailwindcss"
 
@@ -9,8 +11,8 @@ const config = {
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
-    // "./node_modules/@nextui-org/theme/dist/components/(date-picker|button|ripple|spinner|calendar|date-input|popover).js",
-
+    // "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    // "./node_modules/@nextui-org/theme/dist/components/(date-picker|input|button|ripple|spinner|calendar|date-input|popover).js"
   ],
   prefix: "",
   theme: {
@@ -80,10 +82,19 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      theme:{
+        extend: {
+          backgroundImage: {
+            'hero-image': "url('public/images/hero-background.png')",
+            'footer-texture': "url('/img/footer-texture.png')",
+          }
+        }
+      }
     },
     
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [nextui()],
 } satisfies Config
 
 export default config
+

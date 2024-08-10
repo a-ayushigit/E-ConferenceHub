@@ -26,6 +26,12 @@ export const navLinks = [
         imgUrl:'/icons/previous.svg',
 
     },
+
+    {
+        label:'Dashboard' , 
+        route:'/dashboard',
+        imgUrl:'/icons/dashboard.svg',
+    }
     // {
     //     label:'Personal Room',
     //     route:'/personal-room',

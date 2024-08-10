@@ -33,7 +33,7 @@ const Page = () => {
     const fetchConferences = async () => {
       try {
         const res = await getAllUpcomingConferences();
-        console.log(res);
+        //console.log(res);
         setUpComingConf(res);
       } catch (error) {
         console.error('Failed to fetch conferences', error);
@@ -43,7 +43,7 @@ const Page = () => {
     };
     
     fetchConferences();
-    console.log("up",upComingConf);
+    //console.log("up",upComingConf);
     upComingConf.map((conf)=>console.log((conf as Conference).title));
   }, [getAllUpcomingConferences]);
 

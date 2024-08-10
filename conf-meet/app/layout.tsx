@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner"
 import '@stream-io/video-react-sdk/dist/css/styles.css';
 const inter = Inter({ subsets: ["latin"] });
 
+// import {NextUIProvider} from "@nextui-org/react";
 export const metadata: Metadata = {
   title: "E-ConferenceHub",
   description: "One stop Solution for streamlining online conferences",
@@ -23,11 +24,12 @@ export default function RootLayout({
       <body className={inter.className}>
        
         <ConvexClientProvider>
-          
+         
           <Navbar/>
           <Toaster />
           
         {children}
+      
         </ConvexClientProvider>
         
         </body>

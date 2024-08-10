@@ -50,28 +50,30 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ conf }) => {
     });
     const [invite, setInvite] = useState(false);
     const [inviteList, setInviteList] = useState(false);
-    console.log(conf);
+    //console.log(conf);
     const { organization } = useOrganization();
     const setAttendees = useMutation(api.conference.setAttendees);
     const ti = `https://fresh-tiger-39.clerk.accounts.dev|${user?.id}`;
     const router = useRouter()
     const conference = useQuery(api.conference.getConferenceForClient, { name: conf.title });
-    console.log(conference);
+    //console.log(conference);
+
+
     const setConferenceAttendee = async () => {
-        (user && conference) ? 
-        
-       setAttendees({ tokenIdentifier: ti, name: user?.fullName ? user.fullName : "user", conferenceId: conference?._id }).then(()=>{
-        toast.success("Attendee added successfully");
-        router.push(`/conference/${conference._id}`)
-       }) 
-            
-        
-        :
-        console.log("no user present!!!");
+        (user && conference) ?
+
+            setAttendees({ tokenIdentifier: ti, name: user?.fullName ? user.fullName : "user", conferenceId: conference?._id }).then(() => {
+                toast.success("Attendee added successfully");
+                router.push(`/conference/${conference._id}`)
+            })
+
+
+            :
+            console.log("no user present!!!");
 
     }
 
-   
+
     return (
         <div className="bg-yellow-300 font-semibold text-blue-950 flex flex-col items-start p-2 m-1 gap-1">
             <h2>{conf.title}</h2>
@@ -90,13 +92,13 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ conf }) => {
                             console.error('Failed to copy meeting link: ', error);
                         });
                 }}>Copy Meeting Link</button>
-                <button onClick={()=>router.push(conf.meetingLink.toString())}>Join Meeting</button>
+                <button onClick={() => router.push(conf.meetingLink.toString())}>Join Meeting</button>
             </div>
 
             <p>Sessions: {conf.sessions.map((session, i) => (i + 1) + '. ' + session.description + ', ' + session.dateTime).join(', ')}</p>
 
             {/* Don't use includes as it compares the actual objects not the properties of the objects , use some instead  */}
-            <div className={`${(((user?.id) && (user?.id === conf.organizer)) || (conf.attendees  && (conf.attendees.some((attendee)=>attendee.tokenIdentifier === ti)))) ? "hidden" : "flex"}`}>
+            <div className={`${(((user?.id) && (user?.id === conf.organizer)) || (conf.attendees && (conf.attendees.some((attendee) => attendee.tokenIdentifier === ti)))) ? "hidden" : "flex"}`}>
                 <button className="bg-blue-400 text-blue-900"
                     onClick={() => {
                         setConferenceAttendee();
@@ -113,10 +115,10 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ conf }) => {
                 <button className="bg-blue-400 text-blue-900"
                     onClick={() => {
                         setActive ? setActive({ organization: conf.orgId }) : null;
-                        console.log(organization?.id === conf.orgId);
-                        console.log(organization?.id);
-                        console.log(organization);
-                        console.log(conf.orgId);
+                        //console.log(organization?.id === conf.orgId);
+                        //console.log(organization?.id);
+                        //console.log(organization);
+                        //console.log(conf.orgId);
                         setInvite(!invite);
                     }}
                 >Invite</button>

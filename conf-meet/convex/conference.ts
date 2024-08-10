@@ -156,14 +156,22 @@ export const getAllUpcomingConferences = mutation({
     args:{},
     handler:async(ctx , args)=>{
         const curDate = new Date(Date.now());
-        const now = Date.parse(curDate.toString());
+        const offset = curDate.getTimezoneOffset();
+        console.log(curDate);
+        const now = Date.parse(new Date(curDate.getTime() - offset ).toString());
+
         const allConferences = await ctx.db.query("conference").collect();
-        console.log(allConferences);
+        //console.log(allConferences);
         const upComingConf: Object[] = [];
         allConferences.map((conference)=>{
            
          const date = conference.startDate || "";
+        
          const ndate = Date.parse(date);
+         
+         console.log("now ",now);
+         console.log(ndate);
+         console.log(ndate > now);
           if(ndate > now){
             upComingConf.push(conference);
           }

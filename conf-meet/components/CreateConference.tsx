@@ -5,7 +5,7 @@ import { useMutation } from 'convex/react';
 import React, { FormEventHandler, useState, useEffect } from 'react';
 import { Call, useCalls, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useRouter } from 'next/navigation';
-
+// import {Textarea} from "@nextui-org/input";
 interface Session {
   dateTime: string;
   description: string;
@@ -130,7 +130,7 @@ const CreateConference = () => {
         value={organizationName}
         placeholder="Conference Name"
         onChange={(e) => setOrganizationName(e.target.value)}
-        className="flex focus:border-none p-2"
+        className="flex focus:border-none p-2 rounded-xl"
       />
       <label className="font-bold">Subject</label>
       <input
@@ -139,9 +139,11 @@ const CreateConference = () => {
         value={subject}
         placeholder="Subject"
         onChange={(e) => setSubject(e.target.value)}
-        className="flex focus:border-none p-2"
+        className="flex focus:border-none p-2 rounded-xl"
       />
-      <label className="font-bold">Start Date</label>
+      <div className="flex flex-row gap-1 justify-between w-full">
+        <div className="flex flex-col ">
+        <label className="font-bold">Start Date</label>
       <input
         type="datetime-local"
         name="startDate"
@@ -157,8 +159,10 @@ const CreateConference = () => {
 
 
         } }
-        className="flex focus:border-none p-2"
+        className="flex flex-grow focus:border-none p-2 rounded-xl w-full"
       />
+        </div>
+      <div className="flex flex-col ">
       <label className="font-bold">End Date</label>
       <input
         type="datetime-local"
@@ -174,21 +178,25 @@ const CreateConference = () => {
           }
           setEndDate(e.target.value);
         } }
-        className="flex focus:border-none p-2"
+        className="flex w-full flex-grow focus:border-none p-2 rounded-xl"
       />
-      <label>Description </label>
-      <input 
-      type="text"
+      </div>
+      
+      </div>
+      
+      <label className="font-bold">Description </label>
+      <textarea
       name="description"
       value={description}
       placeholder="Give a Brief Description"
       onChange={(e) => setDescription(e.target.value)}
-      className="flex focus:border-none p-2"/> 
+      className="flex focus:border-none p-2 rounded-xl"/> 
+    
       <h3 className="font-bold">Session Details</h3>
       <label>Name of session</label>
       <input
         type="text"
-        className="border-spacing-1 p-2 m-1 w-full"
+        className="border-spacing-1 p-2 m-1 w-full rounded-xl"
         value={values.description}
         placeholder="Session Name"
         onChange={(e) => setValues({ ...values, description: e.target.value })}
@@ -196,7 +204,7 @@ const CreateConference = () => {
       <label>Date and Time</label>
       <input
         type="datetime-local"
-        className="border-spacing-1 p-2 m-1 w-full"
+        className="border-spacing-1 p-2 m-1 w-full rounded-xl"
         value={values.dateTime}
         onChange={(e) => {
           const sessionDate = Date.parse((e.target.value).toString());
