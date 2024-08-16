@@ -62,15 +62,29 @@ http.route({
         //   break;
 
         case "organization.created":
-          console.log("Organization Created", result.data);
+          try {
+            console.log("Organization Created", result.data);
           const conference = await ctx.runQuery(internal.conference.getConference, {name:result.data.name});
           if(conference !== null ){
-            await ctx.runMutation(internal.conference.giveOrgIdtoConference, {
+           const receivedOrgId =  await ctx.runMutation(internal.conference.giveOrgIdtoConference, {
               conferenceId: conference._id ,
               orgId: result.data.id,
             })
+
+            if(receivedOrgId) {
+              await ctx.runMutation(internal.user.addCreatedConference , {
+                orgId:receivedOrgId,
+                tokenId:`https://fresh-tiger-39.clerk.accounts.dev|${result.data.created_by}`,
+                role:"admin",
+              })
+              console.log("Conference orgId added successfully  and conference added to user table !!!");
+            }
           }
           else  new ConvexError("Conference not made yet ")
+          } catch (error) {
+            console.log("org_id not set : ",error);
+          }
+          
         
           break;
         case  "organizationInvitation.accepted":

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { LayoutList, Users } from 'lucide-react';
 import { Button } from './ui/button';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import EndCallButton from './EndCallButton';
 import Loader from './Loader';
 //use of  double exclamation marks 
@@ -39,6 +39,8 @@ const MeetingRoom = () => {
     const { useCallCallingState} = useCallStateHooks();
     const callingState = useCallCallingState();
     const searchParams = useSearchParams();
+    const router = useRouter();
+    if(callingState == CallingState.LEFT) router.push('/upcoming'); 
     if(callingState !== CallingState.JOINED) return <Loader/>;
 
     

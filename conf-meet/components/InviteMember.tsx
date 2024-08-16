@@ -57,8 +57,9 @@ export const InviteMember = () => {
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="flex flex-row gap-2 items-center">
       <input
+        className="flex flex-grow rounded-xl hover:border p-2 text-xs"
         name="email"
         type="text"
         placeholder="Email address"
@@ -67,7 +68,7 @@ export const InviteMember = () => {
       />
       <label>Role</label>
       <SelectRole fieldName={"role"} />
-      <button type="submit" disabled={disabled}>
+      <button type="submit" className="bg-blue-200 text-blue-900 rounded-xl p-3 hover:shadow-lg" disabled={disabled}>
         Invite
       </button>
     </form>

@@ -33,7 +33,7 @@ useEffect(()=>{
     }
     console.log("call ",call);
   
-    if (isMicCamOn){
+    if (!isMicCamOn){
       call?.camera.disable();
       call?.microphone.disable();
   }

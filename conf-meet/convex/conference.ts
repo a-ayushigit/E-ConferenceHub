@@ -21,11 +21,11 @@ export const createConference = mutation({
         
          title:v.string(),
          subject:v.string(),
-         organizer:v.string(),
+         organizer:v.optional(v.object({userId:v.string(), userName:v.string()})),
          startDate:v.string(),
          endDate:v.string(),
          meetingLink:v.string(),
-         sessions:v.optional(v.array(v.object({ description:v.string() , dateTime:v.string() }))),
+         sessions:v.optional(v.array(v.object({name:v.string(), description:v.string() , dateTime:v.string() }))),
          description:v.string(),
          
     },
@@ -129,7 +129,7 @@ export const giveOrgIdtoConference = internalMutation({
                 orgId: args.orgId
             })
             console.log("Organizer updated")
-            return  
+            return args.orgId
         } catch (error) {
             console.log(error);
         }
@@ -151,14 +151,39 @@ export const inviteSpeakersToConference = mutation({
     args:{} , 
     handler:async(ctx,args)=>{}
 })
+const convertUTCtoISTcur = (date:String) =>{
+    const dateParts = date.split(',');
+    const [d , m , y] = dateParts[0].split('/');
+    const [h , min , s] = dateParts[1].split(':');
+        
+    const dateObject = new Date(Number('20'+y) , Number(m)-1 , Number(d) , Number(h) , Number(min) , Number(s));
+    return (dateObject);
+}
+
+const convertUTCtoIST = (date:String) =>{
+    const dateParts = date.split('T');
+    const [y , m , d] = dateParts[0].split('-');
+    const [h , min] = dateParts[1].split(':');
+    const dateObject = new Date(Number(y) , Number(m)-1 , Number(d) , Number(h) , Number(min) );
+    return dateObject;
+}
+
+
 //get all upcoming conferences 
 export const getAllUpcomingConferences = mutation({
     args:{},
     handler:async(ctx , args)=>{
-        const curDate = new Date(Date.now());
-        const offset = curDate.getTimezoneOffset();
-        console.log(curDate);
-        const now = Date.parse(new Date(curDate.getTime() - offset ).toString());
+        const date = new Date(Date.now());
+        const curDate = date.toLocaleString('en-IN' , {
+            day:'2-digit' , 
+            month:'2-digit',
+            year:'2-digit',
+            hour:'2-digit',
+            minute:'2-digit',
+            second:'2-digit',
+            hour12:false,
+             timeZone: 'Asia/Kolkata'
+        })
 
         const allConferences = await ctx.db.query("conference").collect();
         //console.log(allConferences);
@@ -167,11 +192,10 @@ export const getAllUpcomingConferences = mutation({
            
          const date = conference.startDate || "";
         
-         const ndate = Date.parse(date);
-         
-         console.log("now ",now);
-         console.log(ndate);
-         console.log(ndate > now);
+         const ndate = convertUTCtoIST(date);
+         const now = convertUTCtoISTcur(curDate);
+         console.log("ndate ", ndate);
+         console.log("curDate " , curDate);
           if(ndate > now){
             upComingConf.push(conference);
           }
@@ -181,24 +205,41 @@ export const getAllUpcomingConferences = mutation({
     }
 })
 
+
+
 //get all previous conferences 
 export const getAllPreviousConferences = mutation({
     args:{},
     handler:async(ctx , args)=>{
-        const curDate = new Date(Date.now());
-        const now = Date.parse(curDate.toString());
+        const date = new Date(Date.now());
+        const curDate = date.toLocaleString('en-IN' , {
+            day:'2-digit' , 
+            month:'2-digit',
+            year:'2-digit',
+            hour:'2-digit',
+            minute:'2-digit',
+            second:'2-digit',
+            hour12:false,
+             timeZone: 'Asia/Kolkata'
+        })
+        
         const allConferences = await ctx.db.query("conference").collect();
         const previousConf: Object[] = [];
         allConferences.map((conference)=>{
            
          const date = conference.startDate || "";
-         const ndate = Date.parse(date);
+         const ndate = convertUTCtoIST(date);
+         const now = convertUTCtoISTcur(curDate);
+         console.log("ndate ", ndate);
+         console.log("curDate " , curDate);
+         console.log(ndate < now);
           if(ndate < now){
             previousConf.push(conference);
           }
+            
+
         })
-        
-        return previousConf;
+      return previousConf;
     }
 })
 
@@ -243,5 +284,21 @@ export const setAttendees = mutation({
             console.log(error);
         }
 
+    }
+})
+
+export const getConferences = mutation({
+    args:{
+        orgId:v.string()
+    },
+    handler:async(ctx , args)=>{
+        try{
+            const {orgId} = args;
+            return await ctx.db.query("conference").withIndex("orgId", (q)=>q.eq("orgId" , orgId)).unique();
+        }
+        catch(error){
+            console.log(error);
+            return new  Error("Conference could not be sent !!!")
+        }
     }
 })

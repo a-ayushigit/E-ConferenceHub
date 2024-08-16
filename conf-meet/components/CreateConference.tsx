@@ -7,6 +7,7 @@ import { Call, useCalls, useStreamVideoClient } from "@stream-io/video-react-sdk
 import { useRouter } from 'next/navigation';
 // import {Textarea} from "@nextui-org/input";
 interface Session {
+  name:string;
   dateTime: string;
   description: string;
 }
@@ -23,17 +24,21 @@ const CreateConference = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [description , setDescription] = useState("");
   const [meetingLink, setMeetingLink] = useState<string>("");
-  const [values, setValues] = useState({ dateTime: '', description: '' });
+  const [values, setValues] = useState({name:'' ,dateTime: '', description: '' });
   const [callDetails, setCallDetails] = useState<Call>();
-
+  
   const router = useRouter();
   useEffect(() => {
     console.log("Sessions updated:", sessions);
+    // console.log(user);
   }, [sessions]);
+   
+ 
 
   const addSession = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const session: Session = {
+    const session:Session = {
+      name:values.name,
       dateTime: values.dateTime,
       description: values.description,
     };
@@ -45,7 +50,7 @@ const CreateConference = () => {
     }
 
     setSessions((prevSessions) => [...prevSessions, session]);
-    setValues({ dateTime: '', description: '' });
+    setValues({ name:'',dateTime: '', description: '' });
   };
 
   const generateCallLink = async (startAt: string, description: string) => {
@@ -61,7 +66,7 @@ const CreateConference = () => {
     const call = client?.call('default', id);
     if (!call) throw new Error('Failed to create a call');
     const startsAt = new Date(startAt).toISOString();
-
+    
     await call.getOrCreate({
       data: {
         starts_at: startsAt,
@@ -71,7 +76,7 @@ const CreateConference = () => {
       }
     });
     setCallDetails(call);
-    console.log(call);
+    // console.log(call);
     const meetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${call.id}`;
     return meetLink;
   };
@@ -86,6 +91,7 @@ const CreateConference = () => {
       }
 
       const firstSession = sessions[0];
+      console.log("first session " , firstSession);
       const meetLink = await generateCallLink(firstSession.dateTime, firstSession.description);
       if (!meetLink) {
         console.log('Failed to generate meeting link');
@@ -100,7 +106,7 @@ const CreateConference = () => {
       const confId = await createConference({
         title: organizationName,
         subject: subject,
-        organizer: user ? user.id : '',
+        organizer: user ? {userId:`https://fresh-tiger-39.clerk.accounts.dev|${user?.id}` , userName:user?.fullName || " " }: { userId:" " , userName:" "},
         startDate: startDate,
         endDate: endDate,
         meetingLink: meetLink,
@@ -108,13 +114,18 @@ const CreateConference = () => {
         description: description
       });
 
+
       setOrganizationName("");
       setSubject("");
       setSessions([]);
       setMeetingLink('');
 
       console.log("Conference created with confId:", confId);
-      if(confId) router.push('/upcoming');
+      if(confId){
+      
+       
+        router.push('/upcoming');
+      } 
 
     } catch (error) {
       console.log(error);
@@ -149,7 +160,7 @@ const CreateConference = () => {
         name="startDate"
         value={startDate}
         onChange={(e) =>{
-          const newDate = Date.parse((e.target.value).toString()) ;
+          const newDate = Date.parse((e.target.value)) ;
           const curDate = new Date(Date.now());
           const now = Date.parse(curDate.toString());
           if (newDate < now){
@@ -193,23 +204,36 @@ const CreateConference = () => {
       className="flex focus:border-none p-2 rounded-xl"/> 
     
       <h3 className="font-bold">Session Details</h3>
-      <label>Name of session</label>
+      <label className="font-bold">Name of session</label>
       <input
         type="text"
         className="border-spacing-1 p-2 m-1 w-full rounded-xl"
-        value={values.description}
+        value={values.name}
         placeholder="Session Name"
+        onChange={(e) => setValues({ ...values, name: e.target.value })}
+      />
+      <label className="font-bold">Description</label>
+      <textarea
+       
+        className="border-spacing-1 p-2 m-1 w-full rounded-xl"
+        value={values.description}
+        placeholder="Session Description"
         onChange={(e) => setValues({ ...values, description: e.target.value })}
       />
-      <label>Date and Time</label>
+      <label className="font-bold">Date and Time</label>
       <input
         type="datetime-local"
         className="border-spacing-1 p-2 m-1 w-full rounded-xl"
         value={values.dateTime}
         onChange={(e) => {
-          const sessionDate = Date.parse((e.target.value).toString());
-          const start = Date.parse(startDate.toString());
-          const end = Date.parse(endDate.toString());
+          const sessionDate = new Date(Date.parse((e.target.value).toString()));
+          // const check = new Date(sessionDate);
+          // console.log("check ",check);
+          const start = new Date(Date.parse(startDate.toString()));
+          const end = new Date(Date.parse(endDate.toString()));
+          console.log("session date " , sessionDate);
+          console.log("start date " , start);
+          console.log("end date " , end);
           if(sessionDate < start || sessionDate > end)
             return new Error("Session date should be between start and end date");
           
@@ -217,14 +241,23 @@ const CreateConference = () => {
         }
         }
       />
-      <button type="button" onClick={addSession}>Add Session</button>
+      <div className="flex items-center justify-center">
+      <button type="button" className="bg-blue-900 text-white rounded-3xl w-40 flex justify-center items-center  p-2" onClick={addSession}>Add Session</button>
+      </div>
+      <div className="flex flex-col divide-y divide-black">
       {sessions.map((session, index) => (
-        <div key={index} className={`${session.dateTime === '' ? "hidden" : "flex flex-col"}`}>
-          <label>Name of session: {session.description}</label>
-          <label>Date and Time: {session.dateTime}</label>
+        <div key={index} className={`${session.dateTime === '' ? "hidden" : "flex flex-col "}`}>
+          <p className="flex flex-col ">
+          <label className=""><span className="flex font-bold">Name of session:</span> {session.name}</label>
+          
+          <label><span className="flex font-bold">Date and Time:</span> {(new Date(session.dateTime)).toLocaleString()}</label>
+          </p>
+          
         </div>
       ))}
-      <button type="submit">Create Conference</button>
+      </div>
+      
+      <button className="bg-blue-900 text-white rounded-3xl  p-2" type="submit">Create Conference</button>
     </form>
   );
 };
