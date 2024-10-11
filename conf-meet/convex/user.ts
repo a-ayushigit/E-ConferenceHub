@@ -103,6 +103,7 @@ export const getUserConference = query({
             if (!user) throw new Error("User not found");
             const conferencesCreated = user.conferencesCreated;
             const conferencesAttended = user.conferencesJoined;
+            // const conferencesCreated  = await ctx.runMutation("conference" , {})
             return {
                 conferencesCreated:conferencesCreated,
                 conferencesAttended:conferencesAttended

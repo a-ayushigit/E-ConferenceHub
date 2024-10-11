@@ -287,7 +287,7 @@ export const setAttendees = mutation({
     }
 })
 
-export const getConferences = mutation({
+export const getConferences = internalMutation({
     args:{
         orgId:v.string()
     },

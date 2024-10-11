@@ -6,29 +6,47 @@ import { api } from '@/convex/_generated/api'
 const page = () => {
     const { user } = useUser();
     const [conferencesList, setConferencesList] = useState<Object[]>([]);
-
+    const [loading , setLoading] = useState(true);
     const ti = `https://fresh-tiger-39.clerk.accounts.dev|${user?.id}`;
 
     // Use `useQuery` to fetch user data
     const curUser = useQuery(api.user.getUser,  { tokenIdentifier: ti });
-   const getConferences = useMutation(api.conference.getConferences);
+  //  const getConferences = useMutation(api.conference.getConferences);
+   const userConferences = useQuery(api.user.getUserConference , {tokenIdentifier: ti});
     useEffect(() => {
-       const fetchConference = async() => {
-        try{
-          const confList:Object[] = [];
-          curUser?.conferencesCreated?.map(async (conf)=>{
-            const res = await getConferences({orgId:conf.orgId});
-            if(res !== undefined || res !== null){
-              confList.push(res?res:{});
-            }
+      // if(curUser){
+      //   console.log("curUser ",curUser);
+      //   const fetchConference = async() => {
+      //     const confList:Object[] = [];
+      //    try{
            
-          })
-          
-        }
-        catch(error){
-          console.log(error);
-        }
-       }
+      //      curUser?.conferencesCreated?.map(async (conf)=>{
+      //        const res = await getConferences({orgId:conf.orgId});
+      //        if(res !== undefined && res !== null){
+             
+      //         confList.push(res?res:{});
+      //         console.log(confList);
+      //         setLoading(false);
+      //         setConferencesList(confList);
+             
+      //       }
+      //     });
+           
+         
+      //    }
+      //    catch(error){
+      //      console.log(error);
+      //    }
+        
+        
+      // }
+      // fetchConference();
+      // }
+
+      // console.log(userConferences);
+      
+
+    
     }, [curUser]);
 
     if (!user) {
@@ -42,12 +60,12 @@ const page = () => {
     <div>
      <h1>Welcome {user?.fullName}</h1> 
     <div>
-     {/* {conferencesList.map((conference, i)=>(
+     {!loading && conferencesList && conferencesList.length > 0 && conferencesList.map((conference, i)=>(
         <div key={i}>
-        
+         Hello
         </div>
-     ))} */}
-     Image Processing
+     ))}
+     
     </div>
     </div>
   )
