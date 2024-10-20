@@ -23,15 +23,16 @@ export const InviteMember = () => {
   const { isLoaded, organization, invitations } = useOrganization(OrgInvitationsParams)
   const [emailAddress, setEmailAddress] = useState("")
   const [disabled, setDisabled] = useState(false)
-  //console.log(organization);
-  if (!isLoaded || !organization) {
-    return <>Loading</>
-  }
   const {  setActive, userMemberships } = useOrganizationList({
     userMemberships: {
         infinite: true,
       },
   })
+  //console.log(organization);
+  if (!isLoaded || !organization) {
+    return <>Loading</>
+  }
+ 
   const onSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     
@@ -43,7 +44,7 @@ export const InviteMember = () => {
     }
 
     if (!submittedData.email || !submittedData.role) {
-      return
+      return;
     }
     
     setDisabled(true)
