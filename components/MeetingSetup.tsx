@@ -18,7 +18,9 @@ const MeetingSetup = ({setIsSetUpComplete , isCallLoading} : {setIsSetUpComplete
     // }
    
     // const call = useCall();
-    const call = !isCallLoading ? useCall() : undefined;
+    let call = useCall();
+    if(isCallLoading) call = undefined;
+    
     if(!call) throw new Error ("Use call must be used within stream call component");
     useEffect(()=>{
       
