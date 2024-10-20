@@ -35,6 +35,7 @@ http.route({
             }`,
            
           });
+          console.log(process.env.NEXT_PUBLIC_TOKEN_IDENTIFIER);
           break;
         // case "user.updated":
         //   await ctx.runMutation(internal.users.updateUser, {
