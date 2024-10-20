@@ -14,6 +14,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
+import Link from 'next/link';
 
 type Conference = {
 
@@ -156,7 +157,8 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ conf, typeState }) => {
                                 console.error('Failed to copy meeting link: ', error);
                             });
                     }}>Copy Meeting Link</button>
-                    <button className="bg-blue-200 text-blue-900 rounded-xl p-3 hover:shadow-lg" onClick={() => router.push(conf.meetingLink.toString())}>Join Meeting</button>
+                    {/* onClick={() => router.push(conf.meetingLink.toString())} */}
+                   <Link href={`${conf.meetingLink.toString()}`}><button className="bg-blue-200 text-blue-900 rounded-xl p-3 hover:shadow-lg" >Join Meeting</button></Link> 
                 </div>
 
             </div>
