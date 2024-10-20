@@ -12,9 +12,9 @@ import {SignedIn,UserButton} from '@clerk/nextjs'
 const Navbar = () => {
   const pathName = usePathname();
   return (
-    <div className="flex flex-1 flex-row  text-white justify-between gap-9 bg-blue-950 w-full">
+    <div className="flex flex-1 flex-row  text-white justify-between gap-9 bg-blue-950 w-screen">
       <div className=" bg-blue-950 text-white font-serif text-lg sm:text-xl font-bold flex justify-center items-center p-3 "><p className="flex bg-blue-900 rounded-xl py-5 shadow-lg p-1 sm:p-3 whitespace-nowrap cursor-pointer">E-ConferenceHub</p></div>
-      <div className="flex flex-row justify-center text-white gap-4 text-xs p-3">
+      <div className="flex flex-row justify-center text-white gap-4 text-xs p-3 min-w-screen">
       {navLinks.map((link)=>{
         const isActive = (pathName === link.route )|| (pathName.startsWith(`${link.route}/`));
         return (

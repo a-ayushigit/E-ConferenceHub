@@ -43,7 +43,7 @@ const page = () => {
       // fetchConference();
       // }
 
-      // console.log(userConferences);
+      console.log(userConferences);
       
 
     
