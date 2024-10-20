@@ -3,7 +3,7 @@ import { useUser } from '@clerk/nextjs'
 import React, { useEffect , useState } from 'react'
 import {useMutation, useQuery} from 'convex/react'
 import { api } from '@/convex/_generated/api'
-const page = () => {
+const Page = () => {
     const { user } = useUser();
     const [conferencesList, setConferencesList] = useState<Object[]>([]);
     const [loading , setLoading] = useState(true);
@@ -71,4 +71,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

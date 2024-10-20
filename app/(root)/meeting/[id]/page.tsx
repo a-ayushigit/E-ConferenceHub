@@ -8,7 +8,7 @@ import MeetingRoom from '@/components/MeetingRoom';
 import { Button } from '../../../../components/ui/button';
 
 
-const meetingPage = ({params : {id}}: {params:{id:string}}) => {
+const Page = ({params : {id}}: {params:{id:string}}) => {
   const { user , isLoaded } = useUser();
   const [isSetupComplete , setIsSetupComplete] = useState(false);
   const [call , setCall] = useState<Call>();
@@ -90,4 +90,4 @@ useEffect(()=>{
   )
 }
 
-export default meetingPage
+export default Page
