@@ -16,7 +16,7 @@ import Image from 'next/image';
 import image from '../public/images/image.jpg'
 
 //auth can only be used in server components 
-const root = () => {
+const Root = () => {
   const router = useRouter();
   const { user } = useUser();
  
@@ -50,4 +50,4 @@ const root = () => {
   )
 }
 
-export default root
+export default Root
