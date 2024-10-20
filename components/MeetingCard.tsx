@@ -55,7 +55,7 @@ const MeetingCard: React.FC<MeetingCardProps> = ({ conf, typeState }) => {
     const { organization } = useOrganization();
     const setAttendees = useMutation(api.conference.setAttendees);
     const addAttendingConference = useMutation(api.user.addAttendingConference);
-    const ti = `https://fresh-tiger-39.clerk.accounts.dev|${user?.id}`;
+    const ti = `${process.env.NEXT_PUBLIC_TOKEN_IDENTIFIER}|${user?.id}`;
     const router = useRouter()
     const conference = useQuery(api.conference.getConferenceForClient, { name: conf.title });
     //console.log(conference);

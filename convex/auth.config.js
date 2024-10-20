@@ -1,7 +1,7 @@
 export default {
     providers:[
         {
-            domain:"https://fresh-tiger-39.clerk.accounts.dev" , 
+            domain:`${process.env.NEXT_PUBLIC_TOKEN_IDENTIFIER}` , 
             applicationID: "convex",
         }
     ]

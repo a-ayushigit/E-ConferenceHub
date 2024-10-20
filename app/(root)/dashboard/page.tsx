@@ -7,7 +7,7 @@ const Page = () => {
     const { user } = useUser();
     const [conferencesList, setConferencesList] = useState<Object[]>([]);
     const [loading , setLoading] = useState(true);
-    const ti = `https://fresh-tiger-39.clerk.accounts.dev|${user?.id}`;
+    const ti = `${process.env.NEXT_PUBLIC_TOKEN_IDENTIFIER}|${user?.id}`;
 
     // Use `useQuery` to fetch user data
     const curUser = useQuery(api.user.getUser,  { tokenIdentifier: ti });

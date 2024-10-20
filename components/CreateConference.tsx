@@ -106,7 +106,7 @@ const CreateConference = () => {
       const confId = await createConference({
         title: organizationName,
         subject: subject,
-        organizer: user ? {userId:`https://fresh-tiger-39.clerk.accounts.dev|${user?.id}` , userName:user?.fullName || " " }: { userId:" " , userName:" "},
+        organizer: user ? {userId:`${process.env.NEXT_PUBLIC_TOKEN_IDENTIFIER}|${user?.id}` , userName:user?.fullName || " " }: { userId:" " , userName:" "},
         startDate: startDate,
         endDate: endDate,
         meetingLink: meetLink,

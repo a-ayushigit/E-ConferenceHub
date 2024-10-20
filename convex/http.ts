@@ -29,7 +29,7 @@ http.route({
       switch (result.type) {
         case "user.created":
           await ctx.runMutation(internal.user.createUser, {
-            tokenIdentifier: `https://fresh-tiger-39.clerk.accounts.dev|${result.data.id}`,
+            tokenIdentifier: `${process.env.NEXT_PUBLIC_TOKEN_IDENTIFIER}|${result.data.id}`,
             name: `${result.data.first_name ?? ""} ${
               result.data.last_name ?? ""
             }`,
@@ -74,7 +74,7 @@ http.route({
             if(receivedOrgId) {
               await ctx.runMutation(internal.user.addCreatedConference , {
                 orgId:receivedOrgId,
-                tokenId:`https://fresh-tiger-39.clerk.accounts.dev|${result.data.created_by}`,
+                tokenId:`${process.env.NEXT_PUBLIC_TOKEN_IDENTIFIER}|${result.data.created_by}`,
                 role:"admin",
               })
               console.log("Conference orgId added successfully  and conference added to user table !!!");
